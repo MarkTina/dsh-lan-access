@@ -1,5 +1,7 @@
 # 局域网访问 (LAN Access)
 
+> 仓库：https://github.com/MarkTina/dsh-lan-access · License: MIT
+
 一个带**左侧栏入口**的 DSH 插件：把本机 dsh Web 界面分享给同一局域网内的其他设备。
 
 ## 功能
@@ -17,7 +19,7 @@
 1. dsh 的 `webserver` 配置**只接受一个具体的本地地址，明确拒绝 `0.0.0.0`**（wildcard），硬写会导致每次启动配置校验失败、Web GUI 起不来。
 2. 宿主的 Web 服务始终监听 `127.0.0.1:<随机端口>`，首个页面请求必须携带进程 token（裸访问返回 401）。
 
-因此本插件不改动宿主监听，而是**额外起一个监听 `0.0.0.0:<端口>` 的 HTTP/WebSocket 反向代理**，把流量透传到本机 loopback，并保持客户端访问时的 Host authority，让会话 cookie 正确绑定。这样既能「所有网卡可访问」，又不会让宿主绑定失败、不影响桌面端正常使用。
+因此本插件不改动宿主监听，而是**额外起一个监听 `0.0.0.0:<端口>` 的 HTTP/WebSocket 反向代理**，把流量透传到本机 loopback；转发时把上游请求的 `Host`/`Origin` 改写为 `127.0.0.1`，以通过 dsh 的 Host/Origin 栅栏（否则 LAN authority 会被 `403` 拒绝）。浏览器地址栏仍是 LAN 地址，`Set-Cookie`（host-only）按它存储，会话正常建立。这样既能「所有网卡可访问」，又不会让宿主绑定失败、不影响桌面端正常使用。
 
 ## 配置
 
@@ -59,3 +61,14 @@
 
 - 端口被占用或地址变化时，只有本插件的代理失效，面板会显示错误，宿主本身不受影响。
 - 不提供设备配对/撤销等高级能力（可搭配其他远程访问插件使用）。
+
+## 安装
+
+作为一个 dsh 插件包安装到某个 profile：
+
+1. 把本仓库克隆/链接到本机目录；
+2. 在 profile 的 `package.json` 依赖里加入本包（如 `"@local/lan-access": "link:<本机路径>"`），并把它加入 `dsh.profile.bundles`；
+3. 或在支持时用插件管理器的 `install_bundle` 指向该目录；
+4. 重启 dsh 生效。
+
+默认端口 `3180`，可在 profile 的 `cordis.patch.yml` 覆盖 `lan-access` 行 config（`enabled` / `port`）。
