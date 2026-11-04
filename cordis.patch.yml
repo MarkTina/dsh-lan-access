@@ -1,0 +1,9 @@
+# 局域网访问 bundle 层：插入 lan-access 插件行。
+# 行 id 由本包拥有；config 是默认值，用户可在 profile 的 cordis.patch.yml
+# 中以同名 id 覆盖（patch 的 config 是整体替换，不深合并），然后重启 dsh。
+- insert:
+    - id: lan-access
+      name: '@local/lan-access'
+      config:
+        enabled: true
+        port: 3180

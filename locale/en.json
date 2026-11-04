@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "LAN Access",
+    "description": "A configurable-port LAN entry: binds 0.0.0.0, forwards to the local dsh, and lists every local IP with a reachable link."
+  },
+  "nav": "LAN Access"
+}

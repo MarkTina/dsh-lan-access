@@ -1,0 +1,49 @@
+{
+  "name": "@local/lan-access",
+  "version": "1.0.0",
+  "private": true,
+  "description": "局域网访问：可配置端口、自动以 0.0.0.0 监听、列出本机所有 IP 与可访问链接。 | LAN access: configurable port, binds 0.0.0.0, lists local IPs with reachable links.",
+  "icon": "icon.svg",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "lan",
+    "remote",
+    "web",
+    "sidebar"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "dsh": ">=0.2.0-rc.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  }
+}
